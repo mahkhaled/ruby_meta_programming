@@ -81,3 +81,60 @@ end
 x = MyClass.new
 x.instance_variable_set(:@price, 10)
 x.get_price # => 10
+
+
+################################
+# Eigenclasses and method lookup
+################################
+# how singleton method works with method lookup?
+# Figuer 4.5, 4.6
+
+
+# when a class includes a module, it gets the module's instance methods NOT the class methods
+module MyModule
+  def self.my_method; 'hello' ; end
+end
+
+class MyClass
+  include MyModule
+end
+# MyClass.my_method # NoMethodError!
+
+# Solution (class extension)
+module MyModule
+  def my_method; 'hello' ; end
+end
+
+class MyClass
+  class << self
+    include MyModule
+  end
+end
+MyClass.my_method # => "hello"
+
+# the same can be written by extend shortcut
+MyClass.extend MyModule
+
+#################
+# alias (new old)
+#################
+class MyClass
+  def my_method; 'my_method()' ; end
+  alias :m :my_method # without comma :|
+end
+obj = MyClass.new
+obj.my_method # => "my_method()"
+obj.m # => "my_method()"
+
+
+# What happens if you alias a method and then redefine it? (Not updated)
+class String
+  alias :real_length :length
+  
+  
+  def length
+    real_length > 5 ? 'long' : 'short'
+  end
+end
+"War and Peace".length # => "long"
+"War and Peace".real_length # => 13
