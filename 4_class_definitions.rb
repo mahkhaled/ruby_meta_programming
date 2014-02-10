@@ -7,6 +7,7 @@ result # => MyClass
 
 def add_method_to(a_class)
   # No scope gates here also using class_eval
+  # can't use define_method because define_method is a private method
   a_class.class_eval do
     def m; 'Hello!' ; end
   end
@@ -66,7 +67,7 @@ end
 
 # class macros
 class Class
-  def attr_accessor_methods(att)
+  def attr_reader_methods(att)
     define_method("get_#{att}") do
       instance_variable_get("@#{att}".to_sym)
     end
@@ -75,7 +76,7 @@ end
 
 class MyClass
   # attr_accessor_methods is a method called over receiver self (MyClass)
-  attr_accessor_methods :price
+  attr_reader_methods :price
 end
 
 x = MyClass.new
@@ -127,7 +128,7 @@ obj.my_method # => "my_method()"
 obj.m # => "my_method()"
 
 
-# What happens if you alias a method and then redefine it? (Not updated)
+# What happens if you alias a method and then redefine it? (See the old one)
 class String
   alias :real_length :length
   

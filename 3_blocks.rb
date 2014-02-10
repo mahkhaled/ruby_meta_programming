@@ -19,7 +19,7 @@ my_method do |y|
   scoped_var = 1
 end # => "Hello, cruel world"    END OF "Scope" not "Scope Gate" (will be explained soon)
 
-scoped_var # => Error!
+# scoped_var # => Error!
 
 ##################################
 # Scope Gates (class, module, def)
@@ -87,6 +87,9 @@ l = lambda { return 10 }
 double(l) # => 20
 
 p = Proc.new { return 10 } # => 10
+# The following fails with a LocalJumpError
+# double(p)
+
 
 # Arity
 p = Proc.new {|a, b| [a, b]}
