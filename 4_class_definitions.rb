@@ -43,6 +43,15 @@ obj.write
 obj.read # => 2
 MyClass.read # => 1
 
+# class variables
+class MyClass
+  @@my_class_var = 10
+  def m; @@my_class_var; end
+  def self.m; @@my_class_var; end
+end
+MyClass.new.m # => 10
+MyClass.m # => 10
+
 # Class variables are different from Class Instance Variables,
 # because they can be accessed by subclasses and by regu-lar instance methods. 
 
